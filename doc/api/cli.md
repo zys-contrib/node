@@ -189,7 +189,7 @@ Error: Access to this API has been restricted
 <!-- YAML
 added: v20.0.0
 changes:
-  - version: REPLACEME
+  - version: v23.5.0
     pr-url: https://github.com/nodejs/node/pull/56201
     description: Permission Model and --allow-fs flags are stable.
   - version: v20.7.0
@@ -234,7 +234,7 @@ node --permission --allow-fs-read=/path/to/index.js index.js
 <!-- YAML
 added: v20.0.0
 changes:
-  - version: REPLACEME
+  - version: v23.5.0
     pr-url: https://github.com/nodejs/node/pull/56201
     description: Permission Model and --allow-fs flags are stable.
   - version: v20.7.0
@@ -1776,7 +1776,7 @@ developers may leverage to detect deprecated API usage.
 <!-- YAML
 added: v20.0.0
 changes:
-  - version: REPLACEME
+  - version: v23.5.0
     pr-url: https://github.com/nodejs/node/pull/56201
     description: Permission Model is now stable.
 -->
@@ -2270,6 +2270,9 @@ This option may be specified multiple times to exclude multiple glob patterns.
 If both `--test-coverage-exclude` and `--test-coverage-include` are provided,
 files must meet **both** criteria to be included in the coverage report.
 
+By default all the matching test files are excluded from the coverage report.
+Specifying this option will override the default behavior.
+
 ### `--test-coverage-functions=threshold`
 
 <!-- YAML
@@ -2630,7 +2633,7 @@ i.e. invoking `process.exit()`.
 
 <!-- YAML
 added:
- - REPLACEME
+ - v23.5.0
 -->
 
 Prints information about usage of [Loading ECMAScript modules using `require()`][].

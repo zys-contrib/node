@@ -127,7 +127,7 @@ open. This method is a wrapper around [`sqlite3_close_v2()`][].
 ### `database.loadExtension(path)`
 
 <!-- YAML
-added: REPLACEME
+added: v23.5.0
 -->
 
 * `path` {string} The path to the shared library to load.
@@ -139,7 +139,7 @@ around [`sqlite3_load_extension()`][]. It is required to enable the
 ### `database.enableLoadExtension(allow)`
 
 <!-- YAML
-added: REPLACEME
+added: v23.5.0
 -->
 
 * `allow` {boolean} Whether to allow loading extensions.
@@ -163,7 +163,7 @@ file. This method is a wrapper around [`sqlite3_exec()`][].
 ### `database.function(name[, options], function)`
 
 <!-- YAML
-added: REPLACEME
+added: v23.5.0
 -->
 
 * `name` {string} The name of the SQLite function to create.
@@ -482,11 +482,19 @@ exception.
 | `TEXT`    | {string}             |
 | `BLOB`    | {Uint8Array}         |
 
-## SQLite constants
+## `sqlite.constants`
 
-The following constants are exported by the `node:sqlite` module.
+<!-- YAML
+added: v23.5.0
+-->
 
-### SQLite Session constants
+* {Object}
+
+An object containing commonly used constants for SQLite operations.
+
+### SQLite constants
+
+The following constants are exported by the `sqlite.constants` object.
 
 #### Conflict-resolution constants
 
@@ -507,7 +515,7 @@ The following constants are meant for use with [`database.applyChangeset()`](#da
   </tr>
   <tr>
     <td><code>SQLITE_CHANGESET_ABORT</code></td>
-    <td>Abort when a change encounters a conflict and roll back databsase.</td>
+    <td>Abort when a change encounters a conflict and roll back database.</td>
   </tr>
 </table>
 
