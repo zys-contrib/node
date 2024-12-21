@@ -45,8 +45,11 @@ Otherwise, the file is loaded using the CommonJS module loader. See
 
 When loading, the [ES module loader][Modules loaders] loads the program
 entry point, the `node` command will accept as input only files with `.js`,
-`.mjs`, or `.cjs` extensions; and with `.wasm` extensions when
-[`--experimental-wasm-modules`][] is enabled.
+`.mjs`, or `.cjs` extensions. With the following flags, additional file
+extensions are enabled:
+
+* [`--experimental-wasm-modules`][] for files with `.wasm` extension.
+* [`--experimental-addon-modules`][] for files with `.node` extension.
 
 ## Options
 
@@ -189,7 +192,7 @@ Error: Access to this API has been restricted
 <!-- YAML
 added: v20.0.0
 changes:
-  - version: REPLACEME
+  - version: v23.5.0
     pr-url: https://github.com/nodejs/node/pull/56201
     description: Permission Model and --allow-fs flags are stable.
   - version: v20.7.0
@@ -234,7 +237,7 @@ node --permission --allow-fs-read=/path/to/index.js index.js
 <!-- YAML
 added: v20.0.0
 changes:
-  - version: REPLACEME
+  - version: v23.5.0
     pr-url: https://github.com/nodejs/node/pull/56201
     description: Permission Model and --allow-fs flags are stable.
   - version: v20.7.0
@@ -880,6 +883,16 @@ and `"` are usable.
 It is possible to run code containing inline types by passing
 [`--experimental-strip-types`][].
 
+### `--experimental-addon-modules`
+
+<!-- YAML
+added: REPLACEME
+-->
+
+> Stability: 1.0 - Early development
+
+Enable experimental import support for `.node` addons.
+
 ### `--experimental-eventsource`
 
 <!-- YAML
@@ -1024,20 +1037,6 @@ When used in conjunction with the `node:test` module, a code coverage report is
 generated as part of the test runner output. If no tests are run, a coverage
 report is not generated. See the documentation on
 [collecting code coverage from tests][] for more details.
-
-### `--experimental-test-isolation=mode`
-
-<!-- YAML
-added: v22.8.0
--->
-
-> Stability: 1.0 - Early development
-
-Configures the type of test isolation used in the test runner. When `mode` is
-`'process'`, each test file is run in a separate child process. When `mode` is
-`'none'`, all test files run in the same process as the test runner. The default
-isolation mode is `'process'`. This flag is ignored if the `--test` flag is not
-present. See the [test runner execution model][] section for more information.
 
 ### `--experimental-test-module-mocks`
 
@@ -1776,7 +1775,7 @@ developers may leverage to detect deprecated API usage.
 <!-- YAML
 added: v20.0.0
 changes:
-  - version: REPLACEME
+  - version: v23.5.0
     pr-url: https://github.com/nodejs/node/pull/56201
     description: Permission Model is now stable.
 -->
@@ -2238,8 +2237,8 @@ added:
 -->
 
 The maximum number of test files that the test runner CLI will execute
-concurrently. If `--experimental-test-isolation` is set to `'none'`, this flag
-is ignored and concurrency is one. Otherwise, concurrency defaults to
+concurrently. If `--test-isolation` is set to `'none'`, this flag is ignored and
+concurrency is one. Otherwise, concurrency defaults to
 `os.availableParallelism() - 1`.
 
 ### `--test-coverage-branches=threshold`
@@ -2269,6 +2268,9 @@ This option may be specified multiple times to exclude multiple glob patterns.
 
 If both `--test-coverage-exclude` and `--test-coverage-include` are provided,
 files must meet **both** criteria to be included in the coverage report.
+
+By default all the matching test files are excluded from the coverage report.
+Specifying this option will override the default behavior.
 
 ### `--test-coverage-functions=threshold`
 
@@ -2319,6 +2321,23 @@ added:
 
 Configures the test runner to exit the process once all known tests have
 finished executing even if the event loop would otherwise remain active.
+
+### `--test-isolation=mode`
+
+<!-- YAML
+added: v22.8.0
+changes:
+  - version: REPLACEME
+    pr-url: https://github.com/nodejs/node/pull/56298
+    description: This flag was renamed from `--experimental-test-isolation` to
+                 `--test-isolation`.
+-->
+
+Configures the type of test isolation used in the test runner. When `mode` is
+`'process'`, each test file is run in a separate child process. When `mode` is
+`'none'`, all test files run in the same process as the test runner. The default
+isolation mode is `'process'`. This flag is ignored if the `--test` flag is not
+present. See the [test runner execution model][] section for more information.
 
 ### `--test-name-pattern`
 
@@ -2630,7 +2649,7 @@ i.e. invoking `process.exit()`.
 
 <!-- YAML
 added:
- - REPLACEME
+ - v23.5.0
 -->
 
 Prints information about usage of [Loading ECMAScript modules using `require()`][].
@@ -3043,6 +3062,7 @@ one is included in the list below.
 * `--enable-source-maps`
 * `--entry-url`
 * `--experimental-abortcontroller`
+* `--experimental-addon-modules`
 * `--experimental-detect-module`
 * `--experimental-eventsource`
 * `--experimental-import-meta-resolve`
@@ -3055,6 +3075,7 @@ one is included in the list below.
 * `--experimental-shadow-realm`
 * `--experimental-specifier-resolution`
 * `--experimental-strip-types`
+* `--experimental-test-isolation`
 * `--experimental-top-level-await`
 * `--experimental-transform-types`
 * `--experimental-vm-modules`
@@ -3125,6 +3146,7 @@ one is included in the list below.
 * `--test-coverage-functions`
 * `--test-coverage-include`
 * `--test-coverage-lines`
+* `--test-isolation`
 * `--test-name-pattern`
 * `--test-only`
 * `--test-reporter-destination`
@@ -3612,6 +3634,7 @@ node --stack-trace-limit=12 -p -e "Error.stackTraceLimit" # prints 12
 [`--diagnostic-dir`]: #--diagnostic-dirdirectory
 [`--env-file-if-exists`]: #--env-file-if-existsconfig
 [`--env-file`]: #--env-fileconfig
+[`--experimental-addon-modules`]: #--experimental-addon-modules
 [`--experimental-sea-config`]: single-executable-applications.md#generating-single-executable-preparation-blobs
 [`--experimental-strip-types`]: #--experimental-strip-types
 [`--experimental-wasm-modules`]: #--experimental-wasm-modules
