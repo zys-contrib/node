@@ -108,8 +108,12 @@ void PerIsolateOptions::CheckOptions(std::vector<std::string>* errors,
 void EnvironmentOptions::CheckOptions(std::vector<std::string>* errors,
                                       std::vector<std::string>* argv) {
   if (!input_type.empty()) {
-    if (input_type != "commonjs" && input_type != "module") {
-      errors->push_back("--input-type must be \"module\" or \"commonjs\"");
+    if (input_type != "commonjs" && input_type != "module" &&
+        input_type != "commonjs-typescript" &&
+        input_type != "module-typescript") {
+      errors->push_back(
+          "--input-type must be \"module\","
+          "\"commonjs\", \"module-typescript\" or \"commonjs-typescript\"");
     }
   }
 
@@ -145,7 +149,7 @@ void EnvironmentOptions::CheckOptions(std::vector<std::string>* errors,
       debug_options_.allow_attaching_debugger = true;
     } else {
       if (test_isolation != "process") {
-        errors->push_back("invalid value for --experimental-test-isolation");
+        errors->push_back("invalid value for --test-isolation");
       }
 
 #ifndef ALLOW_ATTACHING_DEBUGGER_IN_TEST_RUNNER
@@ -408,6 +412,10 @@ EnvironmentOptionsParser::EnvironmentOptionsParser() {
   AddOption("--entry-url",
             "Treat the entrypoint as a URL",
             &EnvironmentOptions::entry_is_url,
+            kAllowedInEnvvar);
+  AddOption("--experimental-addon-modules",
+            "experimental import support for addons",
+            &EnvironmentOptions::experimental_addon_modules,
             kAllowedInEnvvar);
   AddOption("--experimental-abortcontroller", "", NoOp{}, kAllowedInEnvvar);
   AddOption("--experimental-eventsource",
@@ -684,10 +692,12 @@ EnvironmentOptionsParser::EnvironmentOptionsParser() {
             "the line coverage minimum threshold",
             &EnvironmentOptions::test_coverage_lines,
             kAllowedInEnvvar);
-
-  AddOption("--experimental-test-isolation",
+  AddOption("--test-isolation",
             "configures the type of test isolation used in the test runner",
-            &EnvironmentOptions::test_isolation);
+            &EnvironmentOptions::test_isolation,
+            kAllowedInEnvvar);
+  // TODO(cjihrig): Remove this alias in a semver major.
+  AddAlias("--experimental-test-isolation", "--test-isolation");
   AddOption("--experimental-test-module-mocks",
             "enable module mocking in the test runner",
             &EnvironmentOptions::test_runner_module_mocks);
